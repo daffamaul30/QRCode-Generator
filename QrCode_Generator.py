@@ -15,7 +15,7 @@ class Window(Gtk.Window):
 
         self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
 
-        listt = [['ARABICA','www.javafrinsa.com'],['ROBUSTA','www.w3school.com']]
+        self.listt = [['ARABICA','www.javafrinsa.com'],['ROBUSTA','www.w3school.com']]
         name_store = Gtk.ListStore(str, str)
         
         self.img = None
@@ -27,11 +27,12 @@ class Window(Gtk.Window):
 
         self.tmbh = Gtk.Button.new_with_label('Tambah Jenis Kopi')
         self.tmbh.set_tooltip_text('klik untuk menambahkan jenis kopi')
-        #self.tmbh.connect("clicked", self.on_generate_clicked)
+        self.tmbh.connect("clicked", self.tambah)
         vbox.pack_start(self.tmbh, False, False, 0)
-        
-        for ini in listt:
+
+        for ini in self.listt:
             name_store.append(ini)
+        print(self.listt)
         vbox.set_border_width(30)
         name_combo = Gtk.ComboBox.new_with_model(name_store)
         renderer_text = Gtk.CellRendererText()
@@ -65,9 +66,48 @@ class Window(Gtk.Window):
         vbox.pack_start(self.btn3, False, True, 0)
 
         self.add(vbox)
+    
+    def tambah(self, widget):
+        dialogWindow = Gtk.MessageDialog(self,
+                          Gtk.DialogFlags.MODAL,
+                          Gtk.MessageType.QUESTION,
+                          Gtk.ButtonsType.OK_CANCEL)
+        
+        dialogWindow.set_title('Tambah Jenis Kopi')
 
+        dialogBox = dialogWindow.get_content_area()
+        userEntry = Gtk.Entry()
+        userEntry.set_placeholder_text("Masukkan Link")
+        userEntry.set_size_request(350,0)
+        dialogBox.pack_end(userEntry, False, False, 0)
+        teks2 = Gtk.Label('Masukkan Link')
+        dialogBox.pack_end(teks2, False, False, 0)
+        userEntry2 = Gtk.Entry()
+        userEntry2.set_placeholder_text("Masukkan Nama Jenis Kopi")
+        userEntry2.set_size_request(350,0)
+        dialogBox.pack_end(userEntry2, False, False, 0)
+        teks = Gtk.Label('Masukkan Nama Jenis Kopi')
+        dialogBox.pack_end(teks, False, False, 0)
+        
+
+
+        dialogWindow.show_all()
+        response = dialogWindow.run()
+        text = userEntry.get_text() 
+        text2 = userEntry2.get_text()
+        dialogWindow.destroy()
+        if (response == Gtk.ResponseType.OK) and (text2 != '') and (text != ''):
+            a = []
+            a.append(text2)
+            a.append(text)
+            
+            self.listt.append(a)
+            print(self.listt)
+            #return text2,text
+        else:
+            return None
     def choose_direct(self, widget):
-        direct = Gtk.FileChooserDialog("Select a file Hoss", self, Gtk.FileChooserAction.SELECT_FOLDER,
+        direct = Gtk.FileChooserDialog("Select a Folder", self, Gtk.FileChooserAction.SELECT_FOLDER,
                                         ("Cancel", Gtk.ResponseType.CANCEL,
                                         "Ok", Gtk.ResponseType.OK))
         response = direct.run()
