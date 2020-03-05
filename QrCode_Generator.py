@@ -16,7 +16,7 @@ class Window(Gtk.Window):
         self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
 
         self.listt = [['ARABICA','www.javafrinsa.com'],['ROBUSTA','www.w3school.com']]
-        name_store = Gtk.ListStore(str, str)
+        self.name_store = Gtk.ListStore(str, str)
         
         self.img = None
     
@@ -31,10 +31,9 @@ class Window(Gtk.Window):
         vbox.pack_start(self.tmbh, False, False, 0)
 
         for ini in self.listt:
-            name_store.append(ini)
-        print(self.listt)
+            self.name_store.append(ini)
         vbox.set_border_width(30)
-        name_combo = Gtk.ComboBox.new_with_model(name_store)
+        name_combo = Gtk.ComboBox.new_with_model(self.name_store)
         renderer_text = Gtk.CellRendererText()
         name_combo.connect("changed", self.on_name_combo_changed)
         name_combo.pack_start(renderer_text, True)
@@ -89,8 +88,6 @@ class Window(Gtk.Window):
         teks = Gtk.Label('Masukkan Nama Jenis Kopi')
         dialogBox.pack_end(teks, False, False, 0)
         
-
-
         dialogWindow.show_all()
         response = dialogWindow.run()
         text = userEntry.get_text() 
@@ -100,9 +97,9 @@ class Window(Gtk.Window):
             a = []
             a.append(text2)
             a.append(text)
-            
             self.listt.append(a)
-            print(self.listt)
+            self.name_store.append(a)
+            #print(self.listt)
             #return text2,text
         else:
             return None
